@@ -55,7 +55,7 @@ class App extends Component {
           return element;
         }),
         task: {
-          counter: this.state.tasks[this.state.tasks.length-1].counter + 1, // ERROR => tasks last child.counter +1
+          counter: this.state.tasks[this.state.tasks.length-1].counter + 1,
           text: '',
           id: uniqid(),
         },
