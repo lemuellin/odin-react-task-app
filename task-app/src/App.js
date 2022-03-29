@@ -13,9 +13,11 @@ class App extends Component {
         id: uniqid(),
       },
       tasks: [],
+      editting: false,
     }
 
     this.removeTask = this.removeTask.bind(this);
+    this.editTask = this.editTask.bind(this);
   }
 
   handleChange = (e) => {
@@ -30,29 +32,66 @@ class App extends Component {
 
   onSubmitTask = (e) => {
     e.preventDefault();
-    this.setState({
-      tasks: this.state.tasks.concat(this.state.task),
-      task: {
-        counter: this.state.task.counter + 1,
-        text: '',
-        id: uniqid(),
-      },
-    });
+    if (this.state.editting === false){
+      this.setState({
+        tasks: this.state.tasks.concat(this.state.task),
+        task: {
+          counter: this.state.task.counter + 1,
+          text: '',
+          id: uniqid(),
+        },
+      });
+    }else{
+      const id = this.state.task.id;
+      const currTask = this.state.tasks.filter(
+        task => task.id === id
+      );
+
+      this.setState({
+        tasks: this.state.tasks.map((element)=>{
+          if (element.id === currTask[0].id){
+            element = this.state.task;
+          }
+          return element;
+        }),
+        task: {
+          counter: this.state.tasks[this.state.tasks.length-1].counter + 1, // ERROR => tasks last child.counter +1
+          text: '',
+          id: uniqid(),
+        },
+        editting: false,
+      });
+    }
   }
 
   removeTask = (e) => {
     e.preventDefault();
-    
     const id = e.target.parentNode.id;
-    console.log(e.target);
-    console.log(e.target.parentNode.parentNode);
-    // console.log(id);
     this.setState({
       tasks: this.state.tasks.filter((task) => {
         return id !== task.id;
       })
     })
   }
+
+  editTask = (e) => {
+    e.preventDefault();
+
+    const id = e.target.parentNode.id;
+    const index = this.state.tasks.findIndex(
+        (task)=>(task.id === id)
+    );
+
+    this.setState({
+      task: {
+        counter: this.state.tasks[index].counter,
+        text: this.state.tasks[index].text,
+        id: e.target.parentNode.id,
+      },
+      editting: true,
+    });
+  }
+    
 
   render() {
     const {task, tasks} = this.state;
@@ -62,7 +101,7 @@ class App extends Component {
           <label htmlFor="taskInput">Enter Task</label>
           <input id="taskInput" type="text" value={task.text} onChange={this.handleChange}/>
           <button type="submit" onClick={this.onSubmitTask}>Submit</button>
-          <Overview tasks={tasks} remove={this.removeTask}/>
+          <Overview tasks={tasks} remove={this.removeTask} edit={this.editTask}/>
         </form>
       </div>
     );
