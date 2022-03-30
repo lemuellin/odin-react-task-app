@@ -13,7 +13,7 @@ class App extends Component {
         id: uniqid(),
       },
       tasks: [],
-      editting: false,
+      editing: false,
     }
 
     this.removeTask = this.removeTask.bind(this);
@@ -59,7 +59,7 @@ class App extends Component {
           text: '',
           id: uniqid(),
         },
-        editting: false,
+        editing: false,
       });
     }
   }
@@ -88,7 +88,7 @@ class App extends Component {
         text: this.state.tasks[index].text,
         id: e.target.parentNode.id,
       },
-      editting: true,
+      editing: true,
     });
   }
     
