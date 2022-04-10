@@ -32,7 +32,7 @@ class App extends Component {
 
   onSubmitTask = (e) => {
     e.preventDefault();
-    if (this.state.editting === false){
+    if (this.state.editing === false){
       this.setState({
         tasks: this.state.tasks.concat(this.state.task),
         task: {
